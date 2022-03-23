@@ -1,5 +1,6 @@
 import argparse
 import os
+import textwrap
 
 import requests
 import telegram
@@ -11,11 +12,15 @@ def send_message(bot, api_answer, tg_chat_id):
     lesson_title = lesson_info['lesson_title']
     lesson_url = lesson_info['lesson_url']
     check_result = 'Ваша работа принята!'
-    if lesson_info['is_negative'] is True:
+    if lesson_info['is_negative']:
         check_result = 'К сожалению, в работе нашлись улучшения.'
-    message = f'Преподаватель проверил работу "{lesson_title}"! \n' \
-              f'Ссылка на работу \n {lesson_url} \n' \
-              f'{check_result}'
+    message = textwrap.dedent(
+        f'''
+        Преподаватель проверил работу "{lesson_title}"!
+        Ссылка на работу {lesson_url}
+        {check_result}
+        '''
+    )
     bot.send_message(text=message, chat_id=tg_chat_id)
 
 
