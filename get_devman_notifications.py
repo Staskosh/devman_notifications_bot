@@ -33,12 +33,12 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
             payload = {'timestamp': timestamp}
             request = requests.get(long_poling_url, headers=headers, params=payload)
             request.raise_for_status()
-            api_answer = request.json()
-            request_status = api_answer['status']
+            response = request.json()
+            request_status = response['status']
             if request_status == 'found':
-                send_message(bot, api_answer, tg_chat_id)
+                send_message(bot, response, tg_chat_id)
             if request_status == 'timeout':
-                timestamp = api_answer['timestamp_to_request']
+                timestamp = response['timestamp_to_request']
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
             print(e)
 
