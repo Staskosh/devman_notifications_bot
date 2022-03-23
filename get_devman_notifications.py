@@ -1,6 +1,7 @@
 import argparse
 import os
 import textwrap
+import time
 
 import requests
 import telegram
@@ -42,7 +43,8 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
                 timestamp = response['timestamp_to_request']
         except requests.exceptions.ReadTimeout as e:
             print(e)
-
+        except requests.exceptions.ConnectionError:
+            time.sleep(10)
 
 
 def main():
