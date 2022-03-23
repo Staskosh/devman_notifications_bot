@@ -6,8 +6,7 @@ import telegram
 from dotenv import load_dotenv
 
 
-def send_message(tg_token, api_answer, tg_chat_id):
-    bot = telegram.Bot(token=tg_token)
+def send_message(bot, api_answer, tg_chat_id):
     lesson_info = api_answer['new_attempts'][0]
     lesson_title = lesson_info['lesson_title']
     lesson_url = lesson_info['lesson_url']
@@ -20,7 +19,7 @@ def send_message(tg_token, api_answer, tg_chat_id):
     bot.send_message(text=message, chat_id=tg_chat_id)
 
 
-def get_devman_lessons_updates(devman_token, tg_token, tg_chat_id):
+def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
     long_poling_url = 'https://dvmn.org/api/long_polling/'
     timestamp = None
     headers = {'Authorization': f'Token {devman_token}'}
@@ -32,7 +31,7 @@ def get_devman_lessons_updates(devman_token, tg_token, tg_chat_id):
             api_answer = request.json()
             request_status = api_answer['status']
             if request_status == 'found':
-                send_message(tg_token, api_answer, tg_chat_id)
+                send_message(bot, api_answer, tg_chat_id)
             if request_status == 'timeout':
                 timestamp = api_answer['timestamp_to_request']
         except (requests.exceptions.ReadTimeout, requests.exceptions.ConnectionError) as e:
@@ -43,11 +42,11 @@ def main():
     load_dotenv()
     devman_token = os.getenv('DEVMAN_TOKEN')
     tg_token = os.getenv('TG_TOKEN')
+    bot = telegram.Bot(token=tg_token)
     parser = argparse.ArgumentParser()
-    parser.add_argument("tg_chat_id", help="Enter the telegram chart id",
-                        type=str)
+    parser.add_argument("tg_chat_id", help="Enter the telegram chart id")
     args = parser.parse_args()
-    get_devman_lessons_updates(devman_token, tg_token, args.tg_chat_id)
+    get_devman_lessons_updates(devman_token, bot, args.tg_chat_id)
 
 
 if __name__ == '__main__':
