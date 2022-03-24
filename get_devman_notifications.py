@@ -32,14 +32,14 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
     while True:
         try:
             payload = {'timestamp': timestamp}
-            request = requests.get(long_poling_url, headers=headers, params=payload)
-            request.raise_for_status()
-            response = request.json()
-            request_status = response['status']
-            if request_status == 'found':
+            response = requests.get(long_poling_url, headers=headers, params=payload)
+            response.raise_for_status()
+            reviews = response.json()
+            review_status = reviews['status']
+            if review_status == 'found':
                 timestamp = response['last_attempt_timestamp']
                 send_message(bot, response, tg_chat_id)
-            if request_status == 'timeout':
+            if review_status == 'timeout':
                 timestamp = response['timestamp_to_request']
         except requests.exceptions.ReadTimeout as e:
             print(e)
