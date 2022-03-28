@@ -40,7 +40,7 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
                 timestamp = reviews['last_attempt_timestamp']
                 send_message(bot, reviews, tg_chat_id)
             if review_status == 'timeout':
-                timestamp = response['timestamp_to_request']
+                timestamp = reviews['timestamp_to_request']
         except requests.exceptions.ReadTimeout as e:
             print(e)
         except requests.exceptions.ConnectionError:
