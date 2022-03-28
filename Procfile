@@ -1,1 +1,1 @@
-bot: python3 get_devman_notifications.py 945715655 
+bot: python3 get_devman_notifications.py

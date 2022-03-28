@@ -41,6 +41,7 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
                 send_message(bot, response, tg_chat_id)
             if review_status == 'timeout':
                 timestamp = response['timestamp_to_request']
+            print('review_status')
         except requests.exceptions.ReadTimeout as e:
             print(e)
         except requests.exceptions.ConnectionError:
@@ -52,10 +53,11 @@ def main():
     devman_token = os.getenv('DEVMAN_TOKEN')
     tg_token = os.getenv('TG_TOKEN')
     bot = telegram.Bot(token=tg_token)
-    parser = argparse.ArgumentParser()
-    parser.add_argument("tg_chat_id", help="Enter the telegram chart id")
-    args = parser.parse_args()
-    get_devman_lessons_updates(devman_token, bot, args.tg_chat_id)
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument("tg_chat_id", help="Enter the telegram chart id")
+    # args = parser.parse_args()
+    tg_chat_id = os.getenv('TG_CHAT_ID')
+    get_devman_lessons_updates(devman_token, bot, tg_chat_id)
 
 
 if __name__ == '__main__':
