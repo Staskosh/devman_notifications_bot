@@ -37,6 +37,7 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
             reviews = response.json()
             review_status = reviews['status']
             if review_status == 'found':
+                print('ошибка', response['last_attempt_timestamp'])
                 timestamp = response['last_attempt_timestamp']
                 send_message(bot, response, tg_chat_id)
             if review_status == 'timeout':
