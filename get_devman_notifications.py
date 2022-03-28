@@ -1,4 +1,4 @@
-import argparse
+import logging
 import os
 import textwrap
 import time
@@ -52,9 +52,8 @@ def main():
     devman_token = os.getenv('DEVMAN_TOKEN')
     tg_token = os.getenv('TG_TOKEN')
     bot = telegram.Bot(token=tg_token)
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("tg_chat_id", help="Enter the telegram chart id")
-    # args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO)
+    logging.info('Бот запустился>')
     tg_chat_id = os.getenv('TG_CHAT_ID')
     get_devman_lessons_updates(devman_token, bot, tg_chat_id)
 
