@@ -16,6 +16,7 @@
 ```
 TG_TOKEN='Токен телеграм бота'
 DEVMAN_TOKEN='обратитесь к поддержку Девман для получения'
+TG_CHAT_ID='Ваш чат id'
 ```
 
 [Python3]('https://www.python.org/downloads/') и [виртуальное окружение]('https://python-scripts.com/virtualenv') должны быть установлены.
@@ -27,10 +28,19 @@ pip install -r requirements.txt
 ```
 3. Чтобы получить свой chat_id, напишите в Telegram специальному боту: `@userinfobot`:
    
-4. Запустите скрипт для получения уведомлений вместе с полученным chat_id:
+4. Запустите скрипт:
 ```bash
-python3 get_devman_notifications.py chat_id
+python3 get_devman_notifications.py
 ```
+### Как запустить на Хероку
+1. Зарегистрируйтесь на [Хероку]('https://id.heroku.com/login')
+2. Cоздайте приложение (app). 
+3. Привяжете аккаунт GitHub к аккаунту Heroku во вкладке Deploy и нажмите Deploy Branch.
+4. Заполните чувствительные данные Config Vars из файла `.env` во вкладке Settings.
+5. Активируйте Dyno во вкладке Resources. 
+
+Готово, теперь ваш бот будет работать постоянно.
+
 ## Цель проекта
 
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [Devman](https://dvmn.org).
