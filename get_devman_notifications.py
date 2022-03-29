@@ -49,7 +49,6 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger):
             reviews = response.json()
             review_status = reviews['status']
             if review_status == 'found':
-                tg_logger.info("Message sent")
                 timestamp = reviews['last_attempt_timestamp']
                 send_message(bot, reviews, tg_chat_id)
             if review_status == 'timeout':
@@ -73,7 +72,14 @@ def main():
     file_handler.setFormatter(formatter)
     tg_logger.addHandler(file_handler)
     tg_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
-    get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger)
+
+    while True:
+        try:
+            get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger)
+        except ZeroDivisionError as e:
+            tg_logger.info('Бот упал с ошибкой')
+            tg_logger.info(e)
+
 
 if __name__ == '__main__':
     main()
