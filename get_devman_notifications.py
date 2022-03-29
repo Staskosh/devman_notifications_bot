@@ -8,6 +8,18 @@ import telegram
 from dotenv import load_dotenv
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 def send_message(bot, reviews, tg_chat_id):
     lesson_info = reviews['new_attempts'][0]
     lesson_title = lesson_info['lesson_title']
@@ -25,7 +37,7 @@ def send_message(bot, reviews, tg_chat_id):
     bot.send_message(text=message, chat_id=tg_chat_id)
 
 
-def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
+def get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger):
     long_poling_url = 'https://dvmn.org/api/long_polling/'
     timestamp = None
     headers = {'Authorization': f'Token {devman_token}'}
@@ -37,6 +49,7 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id):
             reviews = response.json()
             review_status = reviews['status']
             if review_status == 'found':
+                tg_logger.info("Message sent")
                 timestamp = reviews['last_attempt_timestamp']
                 send_message(bot, reviews, tg_chat_id)
             if review_status == 'timeout':
@@ -52,11 +65,15 @@ def main():
     devman_token = os.getenv('DEVMAN_TOKEN')
     tg_token = os.getenv('TG_TOKEN')
     bot = telegram.Bot(token=tg_token)
-    logging.basicConfig(level=logging.INFO)
-    logging.info('Бот запустился>')
     tg_chat_id = os.getenv('TG_CHAT_ID')
-    get_devman_lessons_updates(devman_token, bot, tg_chat_id)
-
+    tg_logger = logging.getLogger("tg_bot_notification")
+    tg_logger.setLevel(logging.INFO)
+    file_handler = logging.FileHandler("tg_bot_notification.log")
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+    tg_logger.addHandler(file_handler)
+    tg_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
+    get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger)
 
 if __name__ == '__main__':
     main()
