@@ -7,6 +7,8 @@ import requests
 import telegram
 from dotenv import load_dotenv
 
+tg_logger = logging.getLogger("tg_bot_notification")
+
 
 class TelegramLogsHandler(logging.Handler):
 
@@ -65,7 +67,6 @@ def main():
     tg_token = os.getenv('TG_TOKEN')
     bot = telegram.Bot(token=tg_token)
     tg_chat_id = os.getenv('TG_CHAT_ID')
-    tg_logger = logging.getLogger("tg_bot_notification")
     tg_logger.setLevel(logging.INFO)
     file_handler = logging.FileHandler("tg_bot_notification.log")
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
