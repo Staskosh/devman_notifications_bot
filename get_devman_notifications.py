@@ -55,8 +55,8 @@ def get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger):
                 send_message(bot, reviews, tg_chat_id)
             if review_status == 'timeout':
                 timestamp = reviews['timestamp_to_request']
-        except requests.exceptions.ReadTimeout as e:
-            print(e)
+        except requests.exceptions.ReadTimeout:
+            pass
         except requests.exceptions.ConnectionError:
             time.sleep(10)
 
@@ -74,12 +74,7 @@ def main():
     tg_logger.addHandler(file_handler)
     tg_logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
 
-    while True:
-        try:
-            get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger)
-        except ZeroDivisionError as e:
-            tg_logger.info('Бот упал с ошибкой')
-            tg_logger.info(e)
+    get_devman_lessons_updates(devman_token, bot, tg_chat_id, tg_logger)
 
 
 if __name__ == '__main__':
