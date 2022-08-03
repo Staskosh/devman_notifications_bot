@@ -4,5 +4,4 @@ WORKDIR /usr/src/devman_notifications_bot_docker
 COPY requirements.txt /usr/src/devman_notifications_bot_docker
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-ENTRYPOINT ["python3"]
-CMD ["get_devman_notifications.py"]
+CMD ["python3", "get_devman_notifications.py"]
