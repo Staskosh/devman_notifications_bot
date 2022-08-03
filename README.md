@@ -54,11 +54,13 @@ docker run -d --env-file ./.env devman_notification_bot_docker
 ```
 Подробнее смотрите [документацию](https://docs.docker.com/get-started/).
 
-#### Как запустить контейнер на Хероку:
+#### Как запустить контейнер на Хероку
 1. Зарегистрируйтесь на [Хероку](https://id.heroku.com/login)
 2. Cоздайте приложение (app). 
 3. Выберите Deployment method во вкладке Deploy.
 4. Следуйте инструкциям ниже в пункте Deploy your Docker-based app.
+5. Заполните чувствительные данные Config Vars из файла .env во вкладке Settings.
+6. Активируйте Dyno во вкладке Resources.
 
 Если в результате запуска вы получили ошибку, то можно воспользоваться методом ниже.
 (Проверено только для Macbook c M1)
