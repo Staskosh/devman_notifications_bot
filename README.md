@@ -41,6 +41,37 @@ python3 get_devman_notifications.py
 
 Готово, теперь ваш бот будет работать постоянно.
 
-## Цель проекта
+### Создание контейнера Docker:
 
-Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [Devman](https://dvmn.org).
+#### Запуск на локальной машине:
+1. Создайте образ:
+```bash
+docker build -t devman_notification_bot_docker . 
+```
+2. Запустите образ локально:
+```bash
+docker run -d --env-file ./.env devman_notification_bot_docker 
+```
+Подробнее смотрите [документацию](https://docs.docker.com/get-started/).
+
+#### Как запустить контейнер на Хероку:
+1. Зарегистрируйтесь на [Хероку](https://id.heroku.com/login)
+2. Cоздайте приложение (app). 
+3. Выберите Deployment method во вкладке Deploy.
+4. Следуйте инструкциям ниже в пункте Deploy your Docker-based app.
+
+Если в результате запуска вы получили ошибку, то можно воспользоваться методом ниже.
+(Проверено только для Macbook c M1)
+
+1. Создайте образ:
+```bash
+docker buildx build --load --platform linux/amd64 -t registry.heroku.com/app_name/bot -a app_name
+```
+2. Отправьте образ:
+```bash
+docker push registry.heroku.com/app_name/bot:latest -a app_name
+```
+3. Запустите образ на Хероку:
+```bash
+heroku container:release bot -a app_name
+```
